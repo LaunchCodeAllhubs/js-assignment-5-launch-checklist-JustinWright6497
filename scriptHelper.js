@@ -64,14 +64,12 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
     } else {
         fuelString = "too low";
     };
-    fuelLevel += " L";
     let cargoString;
     if (cargoMass <= 10000) {
         cargoString = "light enough";
     } else {
         cargoString = "too heavy";
     };
-    cargoMass += " kg";
 
     let submissionArray = [
         ["pilotStatus" , "Pilot", pilot, `is ready`],
@@ -88,7 +86,7 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
         faultyItemsInner += `<li id="${submissionArray[i][0]}" data-testid="${submissionArray[i][0]}">${submissionArray[i][1]} ${submissionArray[i][2]} ${submissionArray[i][3]} for launch</li>`;
     };
 
-    if (submissionArray[3][3] === "too heavy"){
+    if (submissionArray[3][3] === "too heavy" && submissionArray[2][3] === "too low"){
         launchStatus.style.color = "#C7254E";
         launchStatus.innerHTML = `Shuttle not ready for launch`;
         shuttleRequirements.style.visibility = "visible";
@@ -97,6 +95,17 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
             ${faultyItemsInner}
         </ol>
         `;
+        alert("Shuttle not ready for launch. Cargo Mass is too heavy and fuel level is too low.");
+    } else if (submissionArray[3][3] === "too heavy") {
+        launchStatus.style.color = "#C7254E";
+        launchStatus.innerHTML = `Shuttle not ready for launch`;
+        shuttleRequirements.style.visibility = "visible";
+        shuttleRequirements.innerHTML = `
+        <ol>
+            ${faultyItemsInner}
+        </ol>
+        `;
+        alert("Shuttle not ready for launch. Cargo Mass is too heavy.");
     } else if (submissionArray[2][3] === "too low") {
         launchStatus.style.color = "red";
         launchStatus.innerHTML = `Shuttle not ready for launch`;
@@ -106,9 +115,12 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
             ${faultyItemsInner}
         </ol>
         `;
+        alert("Shuttle not ready for launch. Fuel level is too low.");
     } else {
         launchStatus.style.color = "#419F6A";
         launchStatus.innerHTML = `Shuttle is ready for launch`;
+        shuttleRequirements.style.visibility = "hidden";
+        alert("Shuttle is ready for launch.");
     };
 };
 
