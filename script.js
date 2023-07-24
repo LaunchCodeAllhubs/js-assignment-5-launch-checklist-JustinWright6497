@@ -1,6 +1,9 @@
 // Write your JavaScript code here!
 window.addEventListener("load", function() {
 
+    let list = document.getElementById("faultyItems");
+    console.log(list.style.visibility);
+
    let listedPlanets;
    // Set listedPlanetsResponse equal to the value returned by calling myFetch()
    let listedPlanetsResponse = myFetch();
