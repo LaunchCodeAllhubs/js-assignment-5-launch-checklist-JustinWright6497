@@ -20,8 +20,9 @@ window.addEventListener("load", function() {
         let copilot = document.getElementById("copilotName").value;
         let fuelLevel = document.getElementById("fuelLevel").value;
         let cargoMass = document.getElementById("cargoMass").value;
+        let list = document.getElementById("faultyItems");
 
-        formSubmission(document, pilot, copilot, fuelLevel, cargoMass);
+        formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass);
         event.preventDefault();
    });
 });

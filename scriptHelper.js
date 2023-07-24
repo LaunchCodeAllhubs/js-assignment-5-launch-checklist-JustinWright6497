@@ -1,5 +1,5 @@
 // Write your helper functions here!
-require("isomorphic-fetch");
+require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
    // Here is the HTML formatting for our mission target div.
@@ -27,18 +27,13 @@ function validateInput(testInput) {
     }
 };
 
-function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
-    console.log(pilot, copilot, fuelLevel, cargoMass);
-    let validPilot = validateInput(pilot, false);
-    let validCopilot = validateInput(copilot, false);
-    let validFuelLevel = validateInput(fuelLevel, true);
-    let validCargoMass = validateInput(cargoMass, true);
+function formSubmission(document, list, pilot, copilot, fuelLevel, cargoMass) {
     let alertString = "";
     let validArray = [
-        ["Pilot", validPilot, "Empty"],
-        ["Copilot", validCopilot, "Empty"],
-        ["Fuel Level", validFuelLevel, "Is a Number"],
-        ["Cargo Mass", validCargoMass, "Is a Number"]
+        ["Pilot", validateInput(pilot), "Empty"],
+        ["Copilot", validateInput(copilot), "Empty"],
+        ["Fuel Level", validateInput(fuelLevel), "Is a Number"],
+        ["Cargo Mass", validateInput(cargoMass), "Is a Number"]
     ];
 
     for (let i = 0; i < validArray.length; i++) {
@@ -47,7 +42,7 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
                 alertString += `${validArray[i][0]} needs to be filled in!\n`;
             };
         } else {
-            if (validArray[i][1] != "Is a Number") {
+            if (validArray[i][1] != validArray[i][2]) {
                 alertString += `${validArray[i][0]} needs to be a number.\n`
             };
         };
@@ -60,67 +55,44 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
 
     let fuelString;
     if (fuelLevel >= 10000) {
-        fuelString = "full enough";
+        fuelString = "high enough";
     } else {
         fuelString = "too low";
     };
     let cargoString;
     if (cargoMass <= 10000) {
-        cargoString = "light enough";
+        cargoString = "low enough";
     } else {
         cargoString = "too heavy";
     };
 
-    let submissionArray = [
-        ["pilotStatus" , "Pilot", pilot, `is ready`],
-        ["copilotStatus", "Copilot", copilot, `is ready`],
-        ["fuelStatus", "Fuel Level of ", fuelLevel, fuelString],
-        ["cargoStatus", "Cargo Mass of ", cargoMass, cargoString]
-    ];
-
-    let shuttleRequirements = document.getElementById("faultyItems");
     let launchStatus = document.getElementById("launchStatus");
-    let faultyItemsInner = ``;
+    let pilotStatus = document.getElementById("pilotStatus");
+    let copilotStatus = document.getElementById("copilotStatus");
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
 
-    for (let i = 0; i < submissionArray.length; i++) {
-        faultyItemsInner += `<li id="${submissionArray[i][0]}" data-testid="${submissionArray[i][0]}">${submissionArray[i][1]} ${submissionArray[i][2]} ${submissionArray[i][3]} for launch</li>`;
-    };
+    pilotStatus.innerHTML = `Pilot ${pilot} is ready for launch`;
+    copilotStatus.innerHTML = `Co-pilot ${copilot} is ready for launch`;
+    fuelStatus.innerHTML = `Fuel level ${fuelString} for launch`;
+    cargoStatus.innerHTML = `Cargo mass ${cargoString} for launch`;
 
-    if (submissionArray[3][3] === "too heavy" && submissionArray[2][3] === "too low"){
+    if (cargoString === "too heavy" && fuelString === "too low"){
         launchStatus.style.color = "#C7254E";
-        launchStatus.innerHTML = `Shuttle not ready for launch`;
-        shuttleRequirements.style.visibility = "visible";
-        shuttleRequirements.innerHTML = `
-        <ol>
-            ${faultyItemsInner}
-        </ol>
-        `;
-        alert("Shuttle not ready for launch. Cargo Mass is too heavy and fuel level is too low.");
-    } else if (submissionArray[3][3] === "too heavy") {
+        launchStatus.innerHTML = `Shuttle Not Ready for Launch`;
+        list.style.visibility = "visible";
+    } else if (cargoString === "too heavy") {
         launchStatus.style.color = "#C7254E";
-        launchStatus.innerHTML = `Shuttle not ready for launch`;
-        shuttleRequirements.style.visibility = "visible";
-        shuttleRequirements.innerHTML = `
-        <ol>
-            ${faultyItemsInner}
-        </ol>
-        `;
-        alert("Shuttle not ready for launch. Cargo Mass is too heavy.");
-    } else if (submissionArray[2][3] === "too low") {
-        launchStatus.style.color = "red";
-        launchStatus.innerHTML = `Shuttle not ready for launch`;
-        shuttleRequirements.style.visibility = "visible";
-        shuttleRequirements.innerHTML = `
-        <ol>
-            ${faultyItemsInner}
-        </ol>
-        `;
-        alert("Shuttle not ready for launch. Fuel level is too low.");
+        launchStatus.innerHTML = `Shuttle Not Ready for Launch`;
+        list.style.visibility = "visible";
+    } else if (fuelString === "too low") {
+        launchStatus.style.color = "#C7254E";
+        launchStatus.innerHTML = `Shuttle Not Ready for Launch`;
+        list.style.visibility = "visible";
     } else {
         launchStatus.style.color = "#419F6A";
-        launchStatus.innerHTML = `Shuttle is ready for launch`;
-        shuttleRequirements.style.visibility = "hidden";
-        alert("Shuttle is ready for launch.");
+        launchStatus.innerHTML = `Shuttle is Ready for Launch`;
+        list.style.visibility = "visible";
     };
 };
 
