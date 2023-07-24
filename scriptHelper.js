@@ -17,19 +17,14 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
    `;
 };
 
-function validateInput(testInput, isToBeNum) {
+function validateInput(testInput) {
     if (testInput === "") {
-        return false;
-    };
-    if (isToBeNum) {
-        if (isNaN(testInput)) {
-            return 1;
-        };
-        return true;
-    };
-    if (testInput) {
-        return true;
-    };
+        return "Empty";
+    } else if (!isNaN(testInput)) {
+        return "Is a Number";
+    } else {
+        return "Not a Number";
+    }
 };
 
 function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
@@ -39,19 +34,28 @@ function formSubmission(document, pilot, copilot, fuelLevel, cargoMass) {
     let validFuelLevel = validateInput(fuelLevel, true);
     let validCargoMass = validateInput(cargoMass, true);
     let alertString = "";
-    let validArray = [["Pilot", validPilot], ["Copilot", validCopilot], ["Fuel Level", validFuelLevel], ["Cargo Mass", validCargoMass]];
+    let validArray = [
+        ["Pilot", validPilot, "Empty"],
+        ["Copilot", validCopilot, "Empty"],
+        ["Fuel Level", validFuelLevel, "Is a Number"],
+        ["Cargo Mass", validCargoMass, "Is a Number"]
+    ];
 
     for (let i = 0; i < validArray.length; i++) {
-        if (validArray[i][1] === false) {
-            alertString += `${validArray[i][0]} needs to be filled in!\n`;
-        };
-        if (validArray[i][1] === 1) {
-            alertString += `${validArray[i][0]} needs to be a number.\n`
+        if (i < 2) {
+            if (validArray[i][1] === validArray[i][2]) {
+                alertString += `${validArray[i][0]} needs to be filled in!\n`;
+            };
+        } else {
+            if (validArray[i][1] != "Is a Number") {
+                alertString += `${validArray[i][0]} needs to be a number.\n`
+            };
         };
     };
 
     if (alertString != "") {
         alert(alertString);
+        return;
     };
 
     let fuelString;
